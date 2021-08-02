@@ -3,11 +3,29 @@ use bevy::prelude::*;
 struct Rotator;
 
 impl Rotator{
-    fn rotator(mut query: Query<&mut Transform, With<Rotator>>){
+    fn rotator(
+        mut query: Query<&mut Transform, With<Rotator>>,
+        keys: Res<Input<KeyCode>>,
+    ){
         for mut item in query.iter_mut() {
-            item.rotate(Quat::from_rotation_x(0.1));
-            item.rotate(Quat::from_rotation_y(0.05));
-            item.rotate(Quat::from_rotation_z(0.025));
+            // x rotation
+            if keys.pressed(KeyCode::Q) {
+                item.rotate(Quat::from_rotation_x(0.02));
+            } else if keys.pressed(KeyCode::E) {
+                item.rotate(Quat::from_rotation_x(-0.02));
+            }
+            // y rotation
+            if keys.pressed(KeyCode::D) {
+                item.rotate(Quat::from_rotation_y(0.02));
+            } else if keys.pressed(KeyCode::A) {
+                item.rotate(Quat::from_rotation_y(-0.02));
+            }
+            // z rotation
+            if keys.pressed(KeyCode::W) {
+                item.rotate(Quat::from_rotation_z(0.02));
+            } else if keys.pressed(KeyCode::S) {
+                item.rotate(Quat::from_rotation_z(-0.02));
+            }
         }
     }
 }

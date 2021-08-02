@@ -2,11 +2,8 @@ use bevy::prelude::*;
 
 struct Rotator;
 
-impl Rotator{
-    fn rotator(
-        mut query: Query<&mut Transform, With<Rotator>>,
-        keys: Res<Input<KeyCode>>,
-    ){
+impl Rotator {
+    fn rotator(mut query: Query<&mut Transform, With<Rotator>>, keys: Res<Input<KeyCode>>) {
         for mut item in query.iter_mut() {
             // x rotation
             if keys.pressed(KeyCode::Q) {
@@ -30,7 +27,6 @@ impl Rotator{
     }
 }
 
-
 fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
@@ -48,15 +44,16 @@ fn setup(
     commands.spawn_bundle(camera);
 
     // cube
-    commands.spawn_bundle(PbrBundle{
-        mesh: meshes.add(Mesh::from(shape::Cube{size: 1.0})),
-        material: materials.add(Color::rgb(0.8, 0.7, 0.6).into()),
-        ..Default::default()
-    })
-    .insert(Rotator);
+    commands
+        .spawn_bundle(PbrBundle {
+            mesh: meshes.add(Mesh::from(shape::Cube { size: 2.0 })),
+            material: materials.add(Color::rgb(0.8, 0.7, 0.6).into()),
+            ..Default::default()
+        })
+        .insert(Rotator);
 
     // light source
-    commands.spawn_bundle(LightBundle{
+    commands.spawn_bundle(LightBundle {
         transform: Transform::from_xyz(3.0, 8.0, 5.0),
         ..Default::default()
     });
@@ -68,5 +65,6 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup.system())
         .add_system(Rotator::rotator.system())
+        .add_system(bevy::input::system::exit_on_esc_system.system())
         .run();
 }
